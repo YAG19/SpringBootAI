@@ -1,0 +1,108 @@
+<mat-sidenav-container class="chat-container">
+
+  <!-- Settings sidenav -->
+  <mat-sidenav
+    #settingsNav
+    mode="over"
+    position="end"
+    class="settings-sidenav"
+    [(opened)]="settingsPanelOpen"
+  >
+    <div class="sidenav-header">
+      <span>Settings</span>
+      <button mat-icon-button (click)="settingsPanelOpen = false">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <app-settings-panel
+      [settings]="settings"
+      (settingsChange)="onSettingsChange($event)"
+      (clearConversation)="onClearConversation()"
+    ></app-settings-panel>
+  </mat-sidenav>
+
+  <!-- Main content -->
+  <mat-sidenav-content class="chat-content">
+
+    <!-- Toolbar -->
+    <mat-toolbar color="primary" class="toolbar">
+      <mat-icon class="toolbar-icon">chat</mat-icon>
+      <span class="toolbar-title">AI Chatbot</span>
+
+      <!-- Provider chip -->
+      <span class="provider-chip">
+        <mat-icon class="provider-icon">memory</mat-icon>
+        {{ settings.provider }}
+        <span *ngIf="settings.streaming" class="stream-badge">SSE</span>
+      </span>
+
+      <span class="spacer"></span>
+
+      <button
+        mat-icon-button
+        (click)="settingsPanelOpen = !settingsPanelOpen"
+        matTooltip="Settings"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Messages area -->
+    <div class="messages-area">
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="messages.length === 0">
+        <mat-icon class="empty-icon">forum</mat-icon>
+        <p>Start a conversation</p>
+        <p class="empty-hint">
+          Using <strong>{{ settings.provider }}</strong> provider.
+          Open <mat-icon class="inline-icon">settings</mat-icon> to switch.
+        </p>
+      </div>
+
+      <!-- Message bubbles -->
+      <app-message-bubble
+        *ngFor="let msg of messages; trackBy: trackById"
+        [message]="msg"
+        class="message-item"
+      ></app-message-bubble>
+
+      <!-- Loading spinner (non-streaming) -->
+      <div class="loading-row" *ngIf="isLoading && !settings.streaming">
+        <mat-spinner diameter="24"></mat-spinner>
+        <span class="loading-text">Thinking…</span>
+      </div>
+
+      <!-- Scroll anchor -->
+      <div #messagesEnd></div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <mat-form-field appearance="outline" class="input-field">
+        <textarea
+          matInput
+          [(ngModel)]="inputText"
+          (keydown)="onKeydown($event)"
+          placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
+          rows="1"
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
+          [disabled]="isLoading"
+        ></textarea>
+      </mat-form-field>
+
+      <button
+        mat-fab
+        color="primary"
+        class="send-btn"
+        (click)="send()"
+        [disabled]="!inputText.trim() || isLoading"
+        matTooltip="Send (Enter)"
+      >
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

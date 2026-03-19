@@ -26,12 +26,12 @@ llm:
     api-key: ${OPENAI_API_KEY:}
     default-model: gpt-4o
   local:
-    # LM Studio default port — change if you configured a different port
-    base-url: http://localhost:1234
+    # LM Studio ngrok public URL (SDK API, not OpenAI-compatible)
+    base-url: https://unfluorinated-lourdes-squashily.ngrok-free.dev
     # LM Studio accepts any non-empty string as the API key
     api-key: lm-studio
-    # The model name shown in LM Studio — override per-request if needed
-    default-model: local-model
+    # Model loaded in LM Studio
+    default-model: qwen/qwen3-4b-thinking-2507
 
 management:
   endpoints:

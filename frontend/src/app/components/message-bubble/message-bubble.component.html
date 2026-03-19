@@ -1,0 +1,37 @@
+<div class="bubble-row" [class.user-row]="message.role === 'user'" [class.assistant-row]="message.role === 'assistant'">
+
+  <!-- Avatar for assistant -->
+  <div class="avatar" *ngIf="message.role === 'assistant'">
+    <mat-icon>smart_toy</mat-icon>
+  </div>
+
+  <!-- Message content -->
+  <div class="bubble-wrapper">
+    <div
+      class="bubble"
+      [class.user-bubble]="message.role === 'user'"
+      [class.assistant-bubble]="message.role === 'assistant'"
+      [class.error-bubble]="message.error"
+      [matTooltip]="message.timestamp ? (message.timestamp | date:'medium') : ''"
+      matTooltipPosition="above"
+    >
+      <span class="content">{{ message.content }}</span><span
+        class="cursor"
+        *ngIf="message.isStreaming"
+        aria-hidden="true"
+      >|</span>
+    </div>
+
+    <!-- Provider / model badge for assistant messages -->
+    <div class="meta" *ngIf="message.role === 'assistant' && !message.isStreaming && (message.provider || message.model)">
+      <span class="badge">
+        <mat-icon class="badge-icon">memory</mat-icon>
+        {{ message.provider }} · {{ message.model }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Spacer for user messages (pushes bubble right) -->
+  <div class="avatar-spacer" *ngIf="message.role === 'user'"></div>
+
+</div>

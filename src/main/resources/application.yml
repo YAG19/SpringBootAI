@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: springbootai
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+# LLM Provider Configuration
+# API keys are loaded from environment variables:
+#   ANTHROPIC_API_KEY  - for Claude
+#   OPENAI_API_KEY     - for OpenAI
+# LM Studio does not require a real API key.
+llm:
+  claude:
+    base-url: https://api.anthropic.com
+    api-key: ${ANTHROPIC_API_KEY:}
+    default-model: claude-sonnet-4-6
+    anthropic-version: "2023-06-01"
+  openai:
+    base-url: https://api.openai.com
+    api-key: ${OPENAI_API_KEY:}
+    default-model: gpt-4o
+  local:
+    # LM Studio default port — change if you configured a different port
+    base-url: http://localhost:1234
+    # LM Studio accepts any non-empty string as the API key
+    api-key: lm-studio
+    # The model name shown in LM Studio — override per-request if needed
+    default-model: local-model
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

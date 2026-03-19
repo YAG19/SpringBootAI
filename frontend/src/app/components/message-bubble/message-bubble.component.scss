@@ -1,0 +1,117 @@
+.bubble-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 100%;
+}
+
+/* User messages pushed to the right */
+.user-row {
+  flex-direction: row-reverse;
+
+  .bubble-wrapper {
+    align-items: flex-end;
+  }
+}
+
+/* Assistant messages on the left */
+.assistant-row {
+  flex-direction: row;
+
+  .bubble-wrapper {
+    align-items: flex-start;
+  }
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--mat-sys-secondary-container, #e8def8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* align with bottom of bubble, above meta */
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--mat-sys-on-secondary-container, #1d192b);
+  }
+}
+
+/* Keeps user row symmetrical (same width as assistant avatar) */
+.avatar-spacer {
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.bubble-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 72%;
+}
+
+.bubble {
+  padding: 10px 16px;
+  border-radius: 18px;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  cursor: default;
+}
+
+.user-bubble {
+  background: var(--mat-sys-primary, #6750a4);
+  color: var(--mat-sys-on-primary, #ffffff);
+  border-bottom-right-radius: 4px;
+}
+
+.assistant-bubble {
+  background: var(--mat-sys-surface-variant, #e7e0ec);
+  color: var(--mat-sys-on-surface-variant, #49454f);
+  border-bottom-left-radius: 4px;
+}
+
+.error-bubble {
+  background: var(--mat-sys-error-container, #ffdad6);
+  color: var(--mat-sys-on-error-container, #410002);
+}
+
+/* Blinking streaming cursor */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Provider / model badge */
+.meta {
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  color: #888;
+  user-select: none;
+}
+
+.badge-icon {
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+  color: inherit;
+}

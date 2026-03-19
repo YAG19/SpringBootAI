@@ -1,0 +1,30 @@
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant, #49454f);
+}
+
+.clear-btn {
+  margin-top: 4px;
+}
+
+mat-divider {
+  margin: 4px 0;
+}

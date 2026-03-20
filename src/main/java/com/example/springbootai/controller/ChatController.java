@@ -116,12 +116,14 @@ public class ChatController {
                 request.model() != null ? request.model() : "default");
 
         LlmService service = serviceFactory.getService(provider);
-
+        System.out.println("Stream request via provider=" + provider + " model=" + request.model() + " message=" + request.message() + "request" + request);
         return service.streamChat(request)
                 .map(chunk -> ServerSentEvent.<String>builder()
                         .event("message")
                         .data(chunk)
                         .build())
+                .doOnNext(event -> log.info("Stream chunk: {}", event.data()))
+                .doOnError(error -> log.error("Stream error: {}", error))
                 .concatWith(Flux.just(
                         ServerSentEvent.<String>builder()
                                 .event("done")

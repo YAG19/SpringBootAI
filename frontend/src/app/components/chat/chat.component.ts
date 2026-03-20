@@ -3,6 +3,7 @@ import {
   ElementRef,
   ViewChild,
   AfterViewChecked,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -59,7 +60,7 @@ export class ChatComponent implements AfterViewChecked {
     streaming: true,
   };
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewChecked(): void {
     if (this.shouldScroll) {
@@ -134,6 +135,7 @@ export class ChatComponent implements AfterViewChecked {
       next: chunk => {
         assistantMsg.content += chunk;
         this.shouldScroll = true;
+        this.cdr.detectChanges();
       },
       error: err => {
         assistantMsg.isStreaming = false;

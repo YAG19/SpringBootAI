@@ -70,6 +70,7 @@ public class LocalLlmService implements LlmService {
                 .retrieve()
                 .bodyToFlux(String.class)
                 .flatMap(this::parseStreamChunk)
+                .doOnNext(chunk -> log.info("Stream chunk: {}", chunk))
                 .doOnError(e -> log.error("Local LLM stream error: {}", e.getMessage()));
     }
 
@@ -106,12 +107,12 @@ public class LocalLlmService implements LlmService {
         }
 
         if (request.history() != null && !request.history().isEmpty()) {
-            ArrayNode history = body.putArray("history");
-            request.history().forEach(msg -> {
-                ObjectNode entry = history.addObject();
-                entry.put("role", msg.role());
-                entry.put("content", msg.content());
-            });
+            // ArrayNode history = body.putArray("history");
+            // request.history().forEach(msg -> {
+            //     ObjectNode entry = history.addObject();
+            //     entry.put("role", msg.role());
+            //     entry.put("content", msg.content());
+            // });
         }
 
         if (stream) {
@@ -141,8 +142,10 @@ public class LocalLlmService implements LlmService {
         try {
             JsonNode node = mapper.readTree(data);
             // LM Studio SDK format: { "content": "chunk" }
-            if (node.has("content")) {
-                String text = node.path("content").asText();
+            System.out.println("node: " + node);
+            System.out.println("node.get(0).asText(): " + node.get(0).asText());
+            if (node.get(0).asText().equals("message")) {
+                String text = node.get(0).asText();
                 return text.isEmpty() ? Flux.empty() : Flux.just(text);
             }
             // Fallback: OpenAI-style delta in case server switches formats

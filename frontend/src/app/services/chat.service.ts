@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChatRequest } from '../models/chat-request.model';
 import { ChatResponse } from '../models/chat-response.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  private readonly baseUrl = '/api/chat';
+  private readonly baseUrl = `${environment.apiBaseUrl}/api/chat`;
 
   constructor(private http: HttpClient) {}
 
